@@ -10,7 +10,7 @@ class Application extends CI_Controller {
     protected $data = array();      // parameters for view components
     protected $id;		  // identifier for our content
     protected $choices = array(// our menu navbar
-	'Home' => '/'
+	'Home' => '/', 'Gallery' => '/gallery', 'About' => 'about'
     );
 
     /**
@@ -21,7 +21,7 @@ class Application extends CI_Controller {
     {
 	parent::__construct();
 	$this->data = array();
-	$this->data['title'] = 'Demo Contact Manager';
+	$this->data['pagetitle'] = 'Simple Image Gallery';
     }
 
     /**
@@ -35,6 +35,15 @@ class Application extends CI_Controller {
 	$this->parser->parse('_template', $this->data);
     }
 
+    
+    function build_menu_bar($choices)
+    {
+        $result = '<ul>';
+        foreach ($choices as $name => $link)
+            $result .= '<li>' . anchor($link, $name) . '</li>';
+        $result .= '</ul>';
+        return $result;
+    }
 }
 
 /* End of file MY_Controller.php */

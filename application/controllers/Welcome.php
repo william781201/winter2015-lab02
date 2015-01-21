@@ -36,9 +36,7 @@
  * @filesource
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
-
-class Welcome extends CI_Controller {
-
+class Welcome extends Application {
 	/**
 	 * Index Page for this controller.
 	 *
@@ -56,9 +54,25 @@ class Welcome extends CI_Controller {
 	 */
 	public function index()
 	{
-		$this->load->view('welcome');
+            //get all pictures from the model
+            
+            $pics = $this->images->newest();
+            //build an array of formatted cells
+            foreach ($pics as $picture)
+                $cells[] = $this->parser->parse('_cell', (array) $picture, true);
+            //load the table class
+            $this->load->library('table');
+            $parms = array(
+                'table_open' => '<table class="gallery">',
+                'cell_start' => '<td class="oneimage">',
+                'cell_alt_start' => '<td class="oneimage">',
+            );
+            $this->table->set_template($parms);
+            
+            $rows = $this->table->make_columns($cells, 3);
+            $this->data['thetable'] = $this->table->generate($rows);
+            
+            $this->data['pagebody'] = 'welcome';
+            $this->render();
 	}
 }
-
-/* End of file welcome.php */
-/* Location: ./application/controllers/Welcome.php */
